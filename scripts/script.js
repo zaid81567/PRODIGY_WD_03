@@ -1,10 +1,12 @@
 const box = [];
-const eventListenerIdOfBoxes = [];
 const whose_turn_el = document.getElementById("whose-turn");
 const reset_el = document.getElementById("reset");
+const x_score_el = document.getElementById("p-x-score");
+const o_score_el = document.getElementById("p-o-score");
 
 let is_x_turn = true;
 let game_board = [];
+let has_won = false;
 
 //=====EVENT_LISTENER==============================================
 reset_el.addEventListener("click", () => {
@@ -15,6 +17,7 @@ reset_el.addEventListener("click", () => {
 // =====GAME_RELATED_FUNSTIONS=====================================
 
 function newGameBoard() {
+  game_board = [];
   console.log("***GENERATING NEW GAME BOARD***");
   for (let i = 0; i < 3; i++) {
     let row = [];
@@ -104,17 +107,16 @@ function checkForWinner(current_player) {
 }
 
 function resetGameBoard() {
+  //clean the board
   for (let i = 0; i < box.length; i++) {
     console.log(i);
     box[i].textContent = "";
     box[i].style.backgroundColor = "transparent";
   }
-}
+  //removing player step marking
+  newGameBoard();
 
-function disableOnBoxClicks() {
-  for (let i = 0; i < box.length; i++) {
-    box[i].removeEventListener("click", eventListenerIdOfBoxes[i]);
-  }
+  has_won = false;
 }
 
 function displayGB() {
@@ -138,41 +140,45 @@ function startGame() {
   }
   // add event listener to the board boxes
   for (let i = 0; i < 9; i++) {
-    let listenerId = box[i].addEventListener("click", (event) => {
-      let current_player = is_x_turn ? "X" : "O";
-      //   console.log("clicked on box " + event.target.classList.contains("box1"));
-      event.target.textContent = current_player;
-      event.target.style.color = is_x_turn ? "white" : "red";
-      //getting clicked box index
-      let box_number = box.indexOf(event.target);
-      console.log(current_player + " CLICKED ON BOX -> " + (box_number + 1));
+    box[i].addEventListener("click", (event) => {
+      if (!has_won) {
+        let current_player = is_x_turn ? "X" : "O";
+        //   console.log("clicked on box " + event.target.classList.contains("box1"));
+        event.target.textContent = current_player;
+        event.target.style.color = is_x_turn ? "white" : "red";
+        //getting clicked box index
+        let box_number = box.indexOf(event.target);
+        console.log(current_player + " CLICKED ON BOX -> " + (box_number + 1));
 
-      //mapping user step in game board array
-      if (box_number < 3) {
-        game_board[0][box_number] = current_player;
-      } else if (box_number < 6) {
-        game_board[1][box_number - 3] = current_player;
-      } else if (box_number < 9) {
-        game_board[2][box_number - 6] = current_player;
+        //mapping user step in game board array
+        if (box_number < 3) {
+          game_board[0][box_number] = current_player;
+        } else if (box_number < 6) {
+          game_board[1][box_number - 3] = current_player;
+        } else if (box_number < 9) {
+          game_board[2][box_number - 6] = current_player;
+        }
+        displayGB(); //on console
+
+        //checking for winner after every step
+        console.log(
+          checkForWinner(current_player)
+            ? current_player + " WON"
+            : "***NO WINNER YET***"
+        );
+        if (checkForWinner(current_player)) {
+          has_won = true;
+          //increamenting player's score
+          is_x_turn
+            ? (x_score_el.textContent = parseInt(x_score_el.textContent) + 1)
+            : (o_score_el.textContent = parseInt(o_score_el.textContent) + 1);
+        }
+
+        //if no winner change player
+        is_x_turn = !is_x_turn;
+        whose_turn_el.textContent = is_x_turn ? "X" : "O";
       }
-      displayGB(); //on console
-
-      //checking for winner after every step
-      console.log(
-        checkForWinner(current_player)
-          ? current_player + " WON"
-          : "***NO WINNER YET***"
-      );
-      if (checkForWinner(current_player)) {
-        disableOnBoxClicks();
-      }
-
-      //if no winner change player
-      is_x_turn = !is_x_turn;
-      whose_turn_el.textContent = is_x_turn ? "X" : "O";
     });
-
-    eventListenerIdOfBoxes.push(listenerId);
   }
 }
 

@@ -113,7 +113,7 @@ nav {
   transition: background-color 300ms;
 }
 
-.box:hover{
+.box:hover {
   background-color: rgba(110, 95, 66, 0.525);
 }
 
