@@ -229,8 +229,8 @@ function startGame() {
             : "***NO WINNER YET***"
         );
         if (checkForWinner(current_player)) {
-          playWinSound();
           has_won = true;
+          playWinSound();
           //increamenting player's score
           is_x_turn
             ? (x_score_el.textContent = parseInt(x_score_el.textContent) + 1)
