@@ -1,17 +1,77 @@
+//game vars
 const box = [];
 const whose_turn_el = document.getElementById("whose-turn");
 const reset_el = document.getElementById("reset");
 const x_score_el = document.getElementById("p-x-score");
 const o_score_el = document.getElementById("p-o-score");
+//model box vars
+const setting_btn = document.getElementById("setting");
+const model_container = document.getElementById("model-box-container");
+const model_box = document.getElementById("model-box");
+const mute_btn = document.getElementById("mute");
+const mute_icon_span = document.getElementById("mute-icon");
 
 let is_x_turn = true;
 let game_board = [];
 let has_won = false;
+let mute = false;
+
+//=====HANDLING_SOUNDS==============================================
+const clickSound = new Audio();
+clickSound.src = "../assets/audio/click.wav";
+
+const winSound = new Audio();
+winSound.src = "../assets/audio/win.wav";
+
+const resetSound = new Audio();
+resetSound.src = "../assets/audio/reset.wav";
+
+function playClickSound() {
+  if (!mute && !has_won) {
+    clickSound.play();
+  }
+}
+
+function playWinSound() {
+  if (!mute || !has_won) {
+    winSound.play();
+  }
+}
+
+function playResetSound() {
+  if (!mute || !has_won) {
+    resetSound.play();
+  }
+}
 
 //=====EVENT_LISTENER==============================================
 reset_el.addEventListener("click", () => {
   console.log("clicked");
   resetGameBoard();
+});
+
+setting_btn.addEventListener("click", () => {
+  model_container.style.display = "flex";
+});
+
+mute_btn.addEventListener("click", (event) => {
+  if (!mute) {
+    mute_icon_span.classList.remove("not-in-mute");
+    mute_icon_span.classList.add("in-mute");
+    mute = !mute;
+  } else {
+    mute_icon_span.classList.remove("in-mute");
+    mute_icon_span.classList.add("not-in-mute");
+    mute = !mute;
+  }
+});
+
+model_box.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
+model_container.addEventListener("click", () => {
+  model_container.style.display = "none";
 });
 
 // =====GAME_RELATED_FUNSTIONS=====================================
@@ -107,6 +167,7 @@ function checkForWinner(current_player) {
 }
 
 function resetGameBoard() {
+  playResetSound();
   //clean the board
   for (let i = 0; i < box.length; i++) {
     console.log(i);
@@ -141,6 +202,7 @@ function startGame() {
   // add event listener to the board boxes
   for (let i = 0; i < 9; i++) {
     box[i].addEventListener("click", (event) => {
+      playClickSound();
       if (!has_won) {
         let current_player = is_x_turn ? "X" : "O";
         //   console.log("clicked on box " + event.target.classList.contains("box1"));
@@ -167,6 +229,7 @@ function startGame() {
             : "***NO WINNER YET***"
         );
         if (checkForWinner(current_player)) {
+          playWinSound();
           has_won = true;
           //increamenting player's score
           is_x_turn

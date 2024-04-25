@@ -42,9 +42,18 @@ nav {
 .reset {
   font-weight: bolder;
   position: absolute;
-  right: 35px;
+  right: 25px;
 
   cursor: pointer;
+}
+
+.setting {
+  font-weight: bolder;
+  position: absolute;
+  left: 25px;
+
+  cursor: pointer;
+  color: rgb(135, 59, 197);
 }
 
 /* player stat container  */
@@ -79,8 +88,9 @@ nav {
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
+  padding-top: 50px;
 }
 
 .row1 {
@@ -114,7 +124,7 @@ nav {
 }
 
 .box:hover {
-  background-color: rgba(110, 95, 66, 0.525);
+  background-color: rgba(110, 95, 66, 0.525) !important;
 }
 
 /* whose turn  */
@@ -133,4 +143,62 @@ nav {
 .whose-turn p {
   position: absolute;
   bottom: 40px;
+}
+
+/* =====SETTING BOX MODEL========================== */
+.model-box-container {
+  position: absolute;
+  color: white;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  display: none;
+
+  backdrop-filter: blur(5px);
+}
+
+.model-box {
+  border: 2px solid;
+  width: 200px;
+  padding: 10px 0;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.github {
+  font-size: 40px;
+  color: rgb(183, 0, 255);
+}
+
+.version {
+  font-size: 15px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  /* font-weight: 100; */
+  color: rgba(255, 255, 255, 0.636);
+}
+
+.model-box > button {
+  width: 90%;
+  margin-top: 10px;
+  background-color: #212121;
+  outline: none;
+  border: 2px rgb(124, 17, 157) solid;
+  padding: 5px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: white;
 }
